@@ -64,7 +64,7 @@ def drop_db():
 if __name__ == '__main__':
 	import sys
 	if sys.argv:
-			if sys.argv[1] == 'init':
-				init_db()
-			elif sys.argv[1] == 'drop':
-				drop_db()
+		if sys.argv[1] == 'init':
+			init_db()
+		elif sys.argv[1] == 'drop':
+			drop_db()

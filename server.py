@@ -10,7 +10,7 @@ app.secret_key = "this is a secret key whatever i'll change it later"
 
 @app.route('/')
 def home():
-	return flask.render_template('home.html', session=None)
+	return flask.render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
