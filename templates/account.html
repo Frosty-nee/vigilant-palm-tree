@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<h1>Account</h1>
+	{% if session['username'] %}
+			username: {{% session['username'] %}}
+
+	{% endif %}
+{% endblock %}
