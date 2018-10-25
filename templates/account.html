@@ -4,7 +4,23 @@
 
 <h1>Account</h1>
 	{% if session['username'] %}
-			username: {{% session['username'] %}}
-
+		username: {{ session['username'] }}
+		<div class=password_update>
+			<form action='' method='POST'>
+				update password <br>
+				<label>current password:</label>
+					<input class=pass type='password' name='current_password'>
+				<br>
+				<label>new password:</label>
+					<input class=pass type='password' name='new_password'>
+					<br>
+				<label>confirm new password:</label>
+					<input class=pass type='password' name='confirm_new_password'>
+				<br>
+				<input type='submit' name='submit' class=submit>
+			</form>
+		</div>
+	{% else %}
+		you are not logged in
 	{% endif %}
 {% endblock %}

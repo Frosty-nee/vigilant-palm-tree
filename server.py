@@ -2,6 +2,7 @@
 import flask
 from flask import request, session
 import sqlalchemy
+import binascii
 
 import db
 
@@ -26,19 +27,38 @@ def login():
 			flask.flash('Invalid username/password combination.')
 			return flask.redirect(flask.url_for('login'))
 
+@app.route('/game')
+def game():
+	if request.method == 'GET':
+		return flask.render_template('game.html')
+
 @app.route('/account', methods=['GET', 'POST'])
 def account():
 	if request.method == 'GET':
 		return flask.render_template('account.html')
-
-
+	if request.method == 'POST':
+		if request.form['new_password'] != request.form['confirm_new_password']:
+			flask.flash('Passwords do not match')
+			return flask.redirect(flask.url_for('account'))
+		user = db.session.query(db.User).filter(db.User.id == session['user_id']).first()
+		print(user.password)
+		print(db.User.hash_pw(request.form['current_password'], binascii.unhexlify(user.salt)))
+		if db.User.hash_pw(request.form['current_password'], binascii.unhexlify(user.salt))[0] == user.password:
+			new_pw = db.User.hash_pw(request.form['new_password'], binascii.unhexlify(user.salt))
+			user.password = new_pw
+			db.session.commit()
+			flask.flash('password updated successfully')
+		else:
+			flask.flash('current password incorrect')
+		return flask.redirect(flask.url_for('account'))
+	
+		
 
 @app.route('/logout')
 def logout():
 	session.pop('username', None)
 	session.pop('user_id', None)
 	return flask.redirect(flask.url_for('home'))
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	if request.method == 'GET':
